@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:traffic_lights"
+             x:Class="traffic_lights.MainPage">
+    <ContentPage.BindingContext>
+        <vm:TrafficLightViewModel/>
+    </ContentPage.BindingContext>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="0" Grid.Column="0" IsVisible="{Binding VisibleRed}"/>
+            <BoxView CornerRadius="90" BackgroundColor="Yellow" Grid.Row="1" Grid.Column="0" IsVisible="{Binding VisibleYellow}"/>
+            <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="0" IsVisible="{Binding VisibleGreen}"/>
+            <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="1" Grid.Column="1" IsVisible="{Binding VisibleWalkersRed}"/>
+            <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="1" IsVisible="{Binding VisibleWalkersGreen}"/>
+        </Grid>
+</ContentPage>
