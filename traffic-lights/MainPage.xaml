@@ -6,20 +6,44 @@
     <ContentPage.BindingContext>
         <vm:TrafficLightViewModel/>
     </ContentPage.BindingContext>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="0" Grid.Column="0" IsVisible="{Binding VisibleRed}"/>
-            <BoxView CornerRadius="90" BackgroundColor="Yellow" Grid.Row="1" Grid.Column="0" IsVisible="{Binding VisibleYellow}"/>
-            <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="0" IsVisible="{Binding VisibleGreen}"/>
-            <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="1" Grid.Column="1" IsVisible="{Binding VisibleWalkersRed}"/>
-            <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="1" IsVisible="{Binding VisibleWalkersGreen}"/>
-        </Grid>
+    <HorizontalStackLayout>
+        <VerticalStackLayout WidthRequest="400" Margin="30, 0">
+            <Grid HeightRequest="600" ColumnSpacing="5" RowSpacing="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="0" Grid.Column="0" IsVisible="{Binding VisibleRed}"/>
+                <BoxView CornerRadius="90" BackgroundColor="Yellow" Grid.Row="1" Grid.Column="0" IsVisible="{Binding VisibleYellow}"/>
+                <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="0" IsVisible="{Binding VisibleGreen}"/>
+                <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="1" Grid.Column="1" IsVisible="{Binding VisibleWalkersRed}"/>
+                <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="1" IsVisible="{Binding VisibleWalkersGreen}"/>
+            </Grid>
+            <Button BackgroundColor ="{Binding ButtonColor}" TextColor="AliceBlue" Text="Wait" Command="{Binding WaitButtonCommand}" Margin="0, 20"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout WidthRequest="400" Margin="30, 0">
+            <Grid HeightRequest="600" ColumnSpacing="5" RowSpacing="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="0" Grid.Column="0" IsVisible="{Binding VisibleRed}"/>
+                <BoxView CornerRadius="90" BackgroundColor="Yellow" Grid.Row="1" Grid.Column="0" IsVisible="{Binding VisibleYellow}"/>
+                <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="0" IsVisible="{Binding VisibleGreen}"/>
+                <BoxView CornerRadius="90" BackgroundColor="Red" Grid.Row="1" Grid.Column="1" IsVisible="{Binding VisibleWalkersRed}"/>
+                <BoxView CornerRadius="90" BackgroundColor="YellowGreen" Grid.Row="2" Grid.Column="1" IsVisible="{Binding VisibleWalkersGreen}"/>
+            </Grid>
+            <Button BackgroundColor ="{Binding ButtonColor}" TextColor="AliceBlue" Text="Wait" Command="{Binding WaitButtonCommand}" Margin="0, 20"/>
+        </VerticalStackLayout>
+    </HorizontalStackLayout>
 </ContentPage>

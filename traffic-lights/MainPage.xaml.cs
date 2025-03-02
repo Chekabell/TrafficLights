@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace traffic_lights;
 
@@ -13,8 +14,25 @@ public class TrafficLightViewModel : INotifyPropertyChanged
     private bool _visibleWalkersRed = false;
     private bool _visibleWalkersGreen = false;
 
+    private Color _buttonColor = Colors.Black;
+    private bool _ButtonClicked = false;
+    public Color ButtonColor{
+        get => _buttonColor;
+        set{
+            _buttonColor = value;
+            OnPropertyChanged();
+        }
+    }
+    public StateTrafficLight State{
+        get => _state;
+        set{
+            _state = value;
+            OnPropertyChanged();
+        }
+    }
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public ICommand WaitButtonCommand {get;}
     public bool VisibleRed{
         get => _visibleRed;
         set {
@@ -51,12 +69,13 @@ public class TrafficLightViewModel : INotifyPropertyChanged
         }
     }
 
-    public void OnPropertyChanged([CallerMemberName] string prop = "")
+    public void OnPropertyChanged([CallerMemberName] string? prop = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        ((Command)WaitButtonCommand).ChangeCanExecute();
     }
 
-    private enum StateTrafficLight
+    public enum StateTrafficLight
     {
         LightOff,
         LightRed,
@@ -69,48 +88,51 @@ public class TrafficLightViewModel : INotifyPropertyChanged
     
     public TrafficLightViewModel()
     {
+        WaitButtonCommand = new Command(()=>{
+            _ButtonClicked = true;
+        }, () => State == StateTrafficLight.LightGreen);
         _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
-        _state = StateTrafficLight.LightOff;
+        State = StateTrafficLight.LightOff;
         MainLoop();
     }
 
     private async void MainLoop()
     {
         await OffLight(3);
-        _state = StateTrafficLight.LightRed;
-        await OnRed(10);
+        State = StateTrafficLight.LightRed;
+        await OnRed(8);
         while (true)
         {
-            switch (_state)
+            switch (State)
             {
                 case StateTrafficLight.LightRed:
-                    _state = StateTrafficLight.BlinkingGreenOnSecondSection;
+                    State = StateTrafficLight.BlinkingGreenOnSecondSection;
                     await BlinkingGreenOnSecondSection(1);
                     break;
                 case StateTrafficLight.BlinkingGreenOnSecondSection:
-                    _state = StateTrafficLight.LightRedYellow;
+                    State = StateTrafficLight.LightRedYellow;
                     await OnRedYellow(2);
                     break;
                 case StateTrafficLight.LightRedYellow:
-                    _state = StateTrafficLight.LightGreen;
+                    State = StateTrafficLight.LightGreen;
                     await OnGreen(8);
                     break;
                 case StateTrafficLight.LightGreen:
-                    _state = StateTrafficLight.BlinkingGreen;
+                    State = StateTrafficLight.BlinkingGreen;
                     await OnBlinkingGreen(2);
+                    ButtonColor = Colors.Black;
                     break;
                 case StateTrafficLight.BlinkingGreen:
-                    _state = StateTrafficLight.LightYellow;
+                    State = StateTrafficLight.LightYellow;
                     await OnYellow(1);
                     break;
                 case StateTrafficLight.LightYellow:
-                    _state = StateTrafficLight.LightRed;
+                    State = StateTrafficLight.LightRed;
                     await OnRed(8);
                     break;
             }
         }
     }
-
     private async Task OffLight(double seconds)
     {
         while (seconds > 0 && await _timer.WaitForNextTickAsync())
@@ -118,7 +140,6 @@ public class TrafficLightViewModel : INotifyPropertyChanged
             seconds--;
         }
     }
-    
     private async Task OnRed(double seconds)
     {
         VisibleRed = true;
@@ -130,7 +151,6 @@ public class TrafficLightViewModel : INotifyPropertyChanged
             seconds--;
         }
     }
-    
     private async Task BlinkingGreenOnSecondSection(double seconds)
     {
         _timer.Period = TimeSpan.FromSeconds(0.5);
@@ -145,7 +165,6 @@ public class TrafficLightViewModel : INotifyPropertyChanged
         VisibleWalkersRed = true;
         VisibleWalkersGreen = false;
     }
-
     private async Task OnRedYellow(double seconds)
     {
         VisibleYellow = true;
@@ -154,7 +173,6 @@ public class TrafficLightViewModel : INotifyPropertyChanged
             seconds--;
         }
     }
-
     private async Task OnGreen(double seconds)
     {
         VisibleRed = false;
@@ -164,10 +182,14 @@ public class TrafficLightViewModel : INotifyPropertyChanged
         VisibleWalkersGreen = false;
         while (seconds > 0 && await _timer.WaitForNextTickAsync())
         {
+            if(_ButtonClicked){
+                ButtonColor = Colors.DarkOrange;
+                seconds = 2;
+                _ButtonClicked = false;
+            }
             seconds--;
         }
     }
-
     private async Task OnBlinkingGreen(double seconds)
     {
         _timer.Period = TimeSpan.FromSeconds(0.5);
@@ -189,6 +211,7 @@ public class TrafficLightViewModel : INotifyPropertyChanged
             seconds--;
         }
     }
+
 }
 
 public partial class MainPage : ContentPage

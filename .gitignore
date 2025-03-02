@@ -1,2 +1,4 @@
 /.vscode
 /traffic-lights.sln
+/traffic-lights/bin
+/traffic-lights/obj

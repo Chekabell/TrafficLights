@@ -9,10 +9,6 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new AppShell())
-        {
-            MaximumWidth = 400,
-            MaximumHeight = 600,
-        };
+        return new Window(new AppShell());
     }
 }
